@@ -9,7 +9,6 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("/v1/puppy")
@@ -26,9 +25,10 @@ public class PuppyResource {
                                    @QueryParam(value = "breed") String breed,
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
-        String treatment = switcher.getClient().getTreatment("CUSTOMER_ID","log_welcomes");
+        Boolean treatment = switcher.getClient().isFeatureEnabled("log_friendly", "Anthony");
+        switcher.getClient().track("sample", "Anthony");
         log.info("treatment is {}", treatment);
-        if (treatment.equals("on")) {
+        if (treatment) {
             log.info("Welcome to the feature!");
         }
         log.debug("Assembling puppies...");

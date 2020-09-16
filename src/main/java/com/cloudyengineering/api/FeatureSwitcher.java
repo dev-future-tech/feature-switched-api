@@ -1,10 +1,8 @@
 package com.cloudyengineering.api;
 
+import com.optimizely.ab.Optimizely;
+import com.optimizely.ab.OptimizelyFactory;
 import io.quarkus.runtime.StartupEvent;
-import io.split.client.SplitClient;
-import io.split.client.SplitClientConfig;
-import io.split.client.SplitFactory;
-import io.split.client.SplitFactoryBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,29 +18,19 @@ public class FeatureSwitcher {
     private Logger log = LoggerFactory.getLogger(FeatureSwitcher.class);
 
     @Inject
-    @ConfigProperty(name = "split.apitoken")
+    @ConfigProperty(name = "optimizely.apitoken")
     String apiToken;
 
-    SplitClient client;
+    private Optimizely optimizelyClient;
 
     public FeatureSwitcher() {
     }
 
     void startup(@Observes StartupEvent event) throws Exception {
-        SplitClientConfig config = SplitClientConfig.builder()
-                .setBlockUntilReadyTimeout(10000)
-                .build();
-
-        SplitFactory splitFactory = SplitFactoryBuilder.build(apiToken, config);
-        this.client = splitFactory.client();
-        try {
-            client.blockUntilReady();
-        } catch (TimeoutException | InterruptedException e) {
-            log.error("Error loading Split config", e);
-        }
+        this.optimizelyClient = OptimizelyFactory.newDefaultInstance(apiToken);
     }
 
-    public SplitClient getClient() {
-        return this.client;
+    public Optimizely getClient() {
+        return this.optimizelyClient;
     }
 }
