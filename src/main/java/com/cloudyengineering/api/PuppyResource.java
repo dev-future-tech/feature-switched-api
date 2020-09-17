@@ -1,5 +1,6 @@
 package com.cloudyengineering.api;
 
+import com.launchdarkly.sdk.LDUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,12 @@ public class PuppyResource {
                                    @QueryParam(value = "breed") String breed,
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
-        String treatment = switcher.getClient().getTreatment("CUSTOMER_ID","log_welcomes");
+
+        LDUser user = new LDUser("anthony@test.com");
+        boolean treatment = switcher.getClient().boolVariation("log_welcomes", user, false);
+
         log.info("treatment is {}", treatment);
-        if (treatment.equals("on")) {
+        if (treatment) {
             log.info("Welcome to the feature!");
         }
         log.debug("Assembling puppies...");

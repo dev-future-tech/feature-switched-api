@@ -41,9 +41,9 @@
     </dependency>
 
     <dependency>
-      <groupId>io.split.client</groupId>
-      <artifactId>java-client</artifactId>
-      <version>4.0.1</version>
+      <groupId>com.launchdarkly</groupId>
+      <artifactId>launchdarkly-java-server-sdk</artifactId>
+      <version>5.1.0</version>
     </dependency>
 
     <dependency>
