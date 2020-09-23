@@ -25,7 +25,7 @@ public class PuppyResource {
                                    @QueryParam(value = "breed") String breed,
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
-        Boolean treatment = switcher.getClient().isFeatureEnabled("log_friendly", "Anthony");
+        Boolean treatment = switcher.evaluate( "Anthony", "log_friendly").get();
         switcher.getClient().track("sample", "Anthony");
         log.info("treatment is {}", treatment);
         if (treatment) {

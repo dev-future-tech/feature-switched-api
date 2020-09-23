@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import java.util.concurrent.TimeoutException;
+import java.util.Optional;
 
 @ApplicationScoped
-public class FeatureSwitcher {
+public class FeatureSwitcher implements Evaluator<Boolean>, SwitchingClient<Optimizely> {
 
     private Logger log = LoggerFactory.getLogger(FeatureSwitcher.class);
 
@@ -30,6 +30,12 @@ public class FeatureSwitcher {
         this.optimizelyClient = OptimizelyFactory.newDefaultInstance(apiToken);
     }
 
+    @Override
+    public Optional<Boolean> evaluate(String customerId, String flag) {
+        return Optional.of(this.optimizelyClient.isFeatureEnabled(flag, customerId));
+    }
+
+    @Override
     public Optimizely getClient() {
         return this.optimizelyClient;
     }
