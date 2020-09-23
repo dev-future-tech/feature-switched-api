@@ -28,8 +28,8 @@ public class PuppyResource {
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
 
-        LDUser user = new LDUser("anthony@test.com");
-        boolean treatment = switcher.getClient().boolVariation("log_welcomes", user, false);
+
+        Boolean treatment = switcher.evaluate("log_welcomes", "anthony@test.com").get();
 
         log.info("treatment is {}", treatment);
         if (treatment) {
