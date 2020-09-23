@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class PuppyResource {
 
     @Inject
-    FeatureSwitcher switcher;
+    Evaluator<String> switcher;
 
     private final Logger log = LoggerFactory.getLogger(PuppyResource.class);
 
@@ -26,7 +26,7 @@ public class PuppyResource {
                                    @QueryParam(value = "breed") String breed,
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
-        String treatment = switcher.getClient().getTreatment("CUSTOMER_ID","log_welcomes");
+        String treatment = switcher.evaluate("CUSTOMER_ID","log_welcomes").get();
         log.info("treatment is {}", treatment);
         if (treatment.equals("on")) {
             log.info("Welcome to the feature!");

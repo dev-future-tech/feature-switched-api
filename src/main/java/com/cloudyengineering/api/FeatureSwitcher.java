@@ -12,10 +12,11 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 
 @ApplicationScoped
-public class FeatureSwitcher {
+public class FeatureSwitcher implements Evaluator<String> {
 
     private Logger log = LoggerFactory.getLogger(FeatureSwitcher.class);
 
@@ -42,7 +43,10 @@ public class FeatureSwitcher {
         }
     }
 
-    public SplitClient getClient() {
-        return this.client;
+    @Override
+    public Optional<String> evaluate(String customerId, String flag) {
+        String treatment = this.client.getTreatment(customerId, flag);
+        return Optional.of(treatment);
     }
+
 }
