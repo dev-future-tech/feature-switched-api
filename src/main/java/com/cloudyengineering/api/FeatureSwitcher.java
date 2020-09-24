@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 
 @ApplicationScoped
-public class FeatureSwitcher implements Evaluator<String> {
+public class FeatureSwitcher implements Evaluator<String>, SwitchingClient<SplitClient> {
 
     private Logger log = LoggerFactory.getLogger(FeatureSwitcher.class);
 
@@ -49,4 +49,8 @@ public class FeatureSwitcher implements Evaluator<String> {
         return Optional.of(treatment);
     }
 
+    @Override
+    public SplitClient getClient() {
+        return this.client;
+    }
 }
