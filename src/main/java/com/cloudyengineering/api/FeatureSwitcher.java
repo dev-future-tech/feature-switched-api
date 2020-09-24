@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.util.Optional;
 
 @ApplicationScoped
-public class FeatureSwitcher {
+public class FeatureSwitcher implements Evaluator<String>, SwitchingClient<Flagr> {
 
     private Logger log = LoggerFactory.getLogger(FeatureSwitcher.class);
 
@@ -29,8 +30,14 @@ public class FeatureSwitcher {
         this.client = new Flagr(this.flagrHost);
     }
 
-    public String evaluate(String flag) {
+    @Override
+    public Flagr getClient() {
+        return this.client;
+    }
+
+    @Override
+    public Optional<String> evaluate(String customerId, String flag) {
         EvaluationContext context = new EvaluationContext(flag);
-        return this.client.evaluate(context).getVariantKey();
+        return Optional.of(this.client.evaluate(context).getVariantKey());
     }
 }

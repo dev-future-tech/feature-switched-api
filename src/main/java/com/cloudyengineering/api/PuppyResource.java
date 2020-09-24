@@ -27,7 +27,7 @@ public class PuppyResource {
                                @DefaultValue("both")
                                @QueryParam("gender") String gender) {
 
-        String treatment = switcher.evaluate("log_welcomes");
+        String treatment = switcher.evaluate(null,"log_welcomes").get();
         log.info("treatment is {}", treatment);
         if (treatment.equals("on")) {
             log.info("Welcome to the feature!");
